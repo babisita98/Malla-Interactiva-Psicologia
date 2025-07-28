@@ -1,105 +1,481 @@
-const ramos = [
-  // Año 1 - Semestre I
-  { id: "historia", nombre: "Historia de la Psicología", requisitos: [], desbloquea: ["introduccion"] },
-  { id: "psicoGeneral", nombre: "Psicología General", requisitos: [], desbloquea: [] },
-  { id: "biologicos", nombre: "Fundamentos Biológicos del Comportamiento", requisitos: [], desbloquea: ["saludMental"] },
-  { id: "genero", nombre: "Sociedad, Sexualidades y Géneros", requisitos: [], desbloquea: [] },
-  { id: "filosofia", nombre: "Filosofía y Psicología", requisitos: [], desbloquea: [] },
-  { id: "ingles1", nombre: "Inglés General I", requisitos: [], desbloquea: ["ingles2"] },
-
-  // Año 1 - Semestre II
-  { id: "introduccion", nombre: "Introducción a la Ciencia de Datos", requisitos: ["historia"], desbloquea: ["investigacion1"] },
-  { id: "procesos", nombre: "Procesos Psicológicos", requisitos: [], desbloquea: [] },
-  { id: "saludMental", nombre: "Sociedad, Políticas Públicas y Salud Mental", requisitos: ["biologicos"], desbloquea: ["neuro"] },
-  { id: "sociocultural", nombre: "Transformaciones Socioculturales", requisitos: [], desbloquea: [] },
-  { id: "ingles2", nombre: "Inglés General II", requisitos: ["ingles1"], desbloquea: ["ingles3"] },
-  { id: "general2", nombre: "Curso de Formación General II", requisitos: [], desbloquea: [] },
-
-  // Año 2 - Semestre III
-  { id: "investigacion1", nombre: "Investigación I", requisitos: ["introduccion"], desbloquea: ["investigacion2"] },
-  { id: "comunicacion", nombre: "Psicología de la Comunicación", requisitos: [], desbloquea: [] },
-  { id: "neuro", nombre: "Neurociencia y Neuropsicología", requisitos: ["saludMental"], desbloquea: [] },
-  { id: "ciclo1", nombre: "Ciclo Vital I: Infancia, Adolescencia y Juventud", requisitos: [], desbloquea: ["ciclo2"] },
-  { id: "social1", nombre: "Psicología Social I", requisitos: [], desbloquea: ["social2"] },
-  { id: "ingles3", nombre: "Inglés General III", requisitos: ["ingles2"], desbloquea: [] },
-  { id: "carrera1", nombre: "Desarrollo de Carrera I", requisitos: [], desbloquea: ["carrera2"] },
-
-  // Año 2 - Semestre IV
-  { id: "investigacion2", nombre: "Investigación II", requisitos: ["investigacion1"], desbloquea: ["investigacion3"] },
-  { id: "personalidad", nombre: "Psicología de la Personalidad", requisitos: [], desbloquea: ["psicopatInf", "psicopatAdulto"] },
-  { id: "psicoanalisis", nombre: "Corrientes Principales: Psicoanálisis", requisitos: [], desbloquea: [] },
-  { id: "ciclo2", nombre: "Ciclo Vital II: Adultez y Vejez", requisitos: ["ciclo1"], desbloquea: [] },
-  { id: "social2", nombre: "Psicología Social II", requisitos: ["social1"], desbloquea: [] },
-  { id: "cognitivo", nombre: "Corrientes Principales: Cognitivo", requisitos: [], desbloquea: [] },
-  { id: "carrera2", nombre: "Desarrollo de Carrera II", requisitos: ["carrera1"], desbloquea: ["carrera3"] },
-  { id: "general4", nombre: "Curso de Formación General IV", requisitos: [], desbloquea: [] },
-
-  // Año 3 - Semestre V
-  { id: "investigacion3", nombre: "Investigación III", requisitos: ["investigacion2"], desbloquea: ["investigacion4"] },
-  { id: "psicopatInf", nombre: "Psicopatología y Psiquiatría: Infancia y Adolescencia", requisitos: [], desbloquea: [] },
-  { id: "sistemica", nombre: "Corrientes Principales: Sistémica", requisitos: [], desbloquea: [] },
-  { id: "psicodiagInf", nombre: "Psicodiagnóstico Infantojuvenil", requisitos: [], desbloquea: ["psicodiagAdulto"] },
-  { id: "salud2", nombre: "Psicologia de la Salud", requisitos: [], desbloquea: [] },
-  { id: "humanismo", nombre: "Corrientes Principales: Humanismo", requisitos: [], desbloquea: [] },
-  { id: "carrera3", nombre: "Desarrollo de Carrera III", requisitos: ["carrera2"], desbloquea: ["carrera4"] },
-  { id: "general5", nombre: "Curso de Formación General V", requisitos: [], desbloquea: [] },
-
-  // Año 3 - Semestre VI
-  { id: "investigacion4", nombre: "Investigación IV", requisitos: ["investigacion3"], desbloquea: [] },
-  { id: "psicopatAdulto", nombre: "Psicopatología y Psiquiatría: Adultez y Vejez", requisitos: ["personalidad"], desbloquea: [] },
-  { id: "socialCom", nombre: "Psicología Social Comunitaria", requisitos: [], desbloquea: [] },
-  { id: "psicodiagAdulto", nombre: "Psicodiagnóstico en Adultez y Vejez", requisitos: ["psicodiagInf"], desbloquea: [] },
-  { id: "trabajo", nombre: "Psicología del Trabajo", requisitos: [], desbloquea: ["organizaciones"] },
-  { id: "carrera4", nombre: "Desarrollo de Carrera IV", requisitos: ["carrera3"], desbloquea: ["carrera5"] },
-  { id: "general6", nombre: "Curso de Formación General VI", requisitos: [], desbloquea: [] },
-
-  // Año 4 - Semestre VII
-  { id: "educacional", nombre: "Psicología Educacional", requisitos: [], desbloquea: [] },
-  { id: "juridica", nombre: "Psicología Jurídica", requisitos: [], desbloquea: [] },
-  { id: "clinica", nombre: "Psicología Clínica", requisitos: [], desbloquea: [] },
-  { id: "proyectos", nombre: "Diseño y Evaluación de Proyectos", requisitos: [], desbloquea: [] },
-  { id: "organizaciones", nombre: "Psicología de las Organizaciones y RRHH", requisitos: ["trabajo"], desbloquea: [] },
-  { id: "carrera5", nombre: "Desarrollo de Carrera V", requisitos: ["carrera4"], desbloquea: [] },
-  { id: "general7", nombre: "Curso de Formación General VII", requisitos: [], desbloquea: [] },
-
-  // Año 4 - Semestre VIII
-  { id: "tallerClin1", nombre: "Taller de Investigación Clínica I", requisitos: [], desbloquea: ["tallerClin2"] },
-  { id: "tallerPsico1", nombre: "Taller de Intervención Campos Psicosociales I", requisitos: [], desbloquea: ["tallerPsico2"] },
-  { id: "grupal", nombre: "Estrategia de Trabajo Grupal", requisitos: [], desbloquea: [] },
-  { id: "elect1", nombre: "Electivo de Profundización I", requisitos: [], desbloquea: [] },
-  { id: "general8", nombre: "Curso de Formación General VIII", requisitos: [], desbloquea: [] },
-
-  // Año 5 - Semestre IX
-  { id: "tallerPsico2", nombre: "Taller de Intervención Campos Psicosociales II", requisitos: ["tallerPsico1"], desbloquea: [] },
-  { id: "tallerClin2", nombre: "Taller de Intervención Clínica II", requisitos: ["tallerClin1"], desbloquea: [] },
-  { id: "elect2", nombre: "Electivo de Profundización II", requisitos: [], desbloquea: [] },
-
-  // Año 5 - Semestre X
-  { id: "practica", nombre: "Práctica Profesional", requisitos: [], desbloquea: [] },
-  { id: "elect3", nombre: "Electivo de Profundización III", requisitos: [], desbloquea: [] },
+// 1. Estructura de la malla con requisitos y descripciones
+const malla = [
+    {
+        año: 1,
+        semestres: [
+            {
+                nombre: "Semestre I",
+                ramos: [
+                    {
+                        nombre: "Historia de la Psicología",
+                        descripcion: "Estudio de la evolución histórica de la psicología.",
+                        desbloquea: ["Introducción a la Ciencia de Datos"]
+                    },
+                    {
+                        nombre: "Psicología General",
+                        descripcion: "Fundamentos básicos de la psicología.",
+                        desbloquea: []
+                    },
+                    {
+                        nombre: "Fundamentos Biológicos del Comportamiento",
+                        descripcion: "Bases biológicas del comportamiento humano.",
+                        desbloquea: ["Sociedad, Políticas Públicas y Salud Mental"]
+                    },
+                    {
+                        nombre: "Sociedad, Sexualidades y Géneros",
+                        descripcion: "Análisis de la sociedad y géneros.",
+                        desbloquea: []
+                    },
+                    {
+                        nombre: "Filosofía y Psicología",
+                        descripcion: "Relación entre la filosofía y la psicología.",
+                        desbloquea: []
+                    },
+                    {
+                        nombre: "Inglés General I",
+                        descripcion: "Nivel inicial de inglés.",
+                        desbloquea: ["Inglés General II"]
+                    }
+                ]
+            },
+            {
+                nombre: "Semestre II",
+                ramos: [
+                    {
+                        nombre: "Introducción a la Ciencia de Datos",
+                        descripcion: "Herramientas básicas para el análisis de datos.",
+                        desbloquea: ["Investigación I"]
+                    },
+                    {
+                        nombre: "Procesos Psicológicos",
+                        descripcion: "Procesos cognitivos y emocionales.",
+                        desbloquea: []
+                    },
+                    {
+                        nombre: "Sociedad, Políticas Públicas y Salud Mental",
+                        descripcion: "Relación entre salud mental y políticas públicas.",
+                        desbloquea: ["Neurociencia y Neuropsicología"]
+                    },
+                    {
+                        nombre: "Transformaciones Socioculturales",
+                        descripcion: "Cambios sociales y culturales.",
+                        desbloquea: []
+                    },
+                    {
+                        nombre: "Inglés General II",
+                        descripcion: "Nivel intermedio de inglés.",
+                        desbloquea: ["Inglés General III"]
+                    },
+                    {
+                        nombre: "Curso de Formación General",
+                        descripcion: "Curso transversal de formación general.",
+                        desbloquea: []
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        año: 2,
+        semestres: [
+            {
+                nombre: "Semestre III",
+                ramos: [
+                    {
+                        nombre: "Investigación I",
+                        descripcion: "Fundamentos de la investigación científica.",
+                        desbloquea: ["Investigación II"]
+                    },
+                    {
+                        nombre: "Psicología de la Comunicación",
+                        descripcion: "Comunicación humana desde la psicología.",
+                        desbloquea: []
+                    },
+                    {
+                        nombre: "Neurociencia y Neuropsicología",
+                        descripcion: "Estudio del sistema nervioso y procesos neuropsicológicos.",
+                        desbloquea: []
+                    },
+                    {
+                        nombre: "Ciclo Vital I: Infancia, Adolescencia y Juventud",
+                        descripcion: "Desarrollo humano en etapas tempranas.",
+                        desbloquea: ["Ciclo Vital II: Adultez y Vejez"]
+                    },
+                    {
+                        nombre: "Psicología Social I",
+                        descripcion: "Bases de la psicología social.",
+                        desbloquea: ["Psicología Social II"]
+                    },
+                    {
+                        nombre: "Inglés General III",
+                        descripcion: "Nivel avanzado de inglés.",
+                        desbloquea: []
+                    },
+                    {
+                        nombre: "Desarrollo de Carrera I",
+                        descripcion: "Introducción al desarrollo profesional.",
+                        desbloquea: ["Desarrollo de Carrera II"]
+                    }
+                ]
+            },
+            {
+                nombre: "Semestre IV",
+                ramos: [
+                    {
+                        nombre: "Investigación II",
+                        descripcion: "Metodología avanzada de investigación.",
+                        desbloquea: ["Investigación III"]
+                    },
+                    {
+                        nombre: "Psicología de la Personalidad",
+                        descripcion: "Teorías y modelos de la personalidad.",
+                        desbloquea: [
+                            "Psicopatología y Psiquiatría: Infancia y Adolescencia",
+                            "Psicopatología y Psiquiatría: Adultez y Vejez"
+                        ]
+                    },
+                    {
+                        nombre: "Corrientes Principales de la Psicología Psicoanálisis",
+                        descripcion: "Psicoanálisis como corriente principal.",
+                        desbloquea: []
+                    },
+                    {
+                        nombre: "Ciclo Vital II: Adultez y Vejez",
+                        descripcion: "Desarrollo humano en etapas adultas.",
+                        desbloquea: []
+                    },
+                    {
+                        nombre: "Psicología Social II",
+                        descripcion: "Procesos grupales y comunitarios.",
+                        desbloquea: []
+                    },
+                    {
+                        nombre: "Corrientes Principales de la Psicología: Cognitivo",
+                        descripcion: "Corriente cognitiva en psicología.",
+                        desbloquea: []
+                    },
+                    {
+                        nombre: "Desarrollo de Carrera II",
+                        descripcion: "Desarrollo profesional intermedio.",
+                        desbloquea: ["Desarrollo de Carrera III"]
+                    },
+                    {
+                        nombre: "Curso de Formación General",
+                        descripcion: "Curso transversal de formación general.",
+                        desbloquea: []
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        año: 3,
+        semestres: [
+            {
+                nombre: "Semestre V",
+                ramos: [
+                    {
+                        nombre: "Investigación III",
+                        descripcion: "Investigación aplicada en psicología.",
+                        desbloquea: ["Investigación IV"]
+                    },
+                    {
+                        nombre: "Psicopatología y Psiquiatría: Infancia y Adolescencia",
+                        descripcion: "Trastornos psiquiátricos en infancia y adolescencia.",
+                        desbloquea: []
+                    },
+                    {
+                        nombre: "Corrientes Principales de la Psicología: Sistémica",
+                        descripcion: "Enfoque sistémico en psicología.",
+                        desbloquea: []
+                    },
+                    {
+                        nombre: "Psicodiagnóstico Infantojuvenil",
+                        descripcion: "Evaluación psicológica en niños y jóvenes.",
+                        desbloquea: ["Psicodiagnóstico en Adultez y Vejez"]
+                    },
+                    {
+                        nombre: "Psicología de la Salud",
+                        descripcion: "Relación entre la psicología y la salud.",
+                        desbloquea: []
+                    },
+                    {
+                        nombre: "Corrientes Principales de la Psicología: Humanismo",
+                        descripcion: "Enfoque humanista en psicología.",
+                        desbloquea: []
+                    },
+                    {
+                        nombre: "Desarrollo de Carrera III",
+                        descripcion: "Desarrollo profesional avanzado.",
+                        desbloquea: ["Desarrollo de Carrera IV"]
+                    },
+                    {
+                        nombre: "Curso de Formación General",
+                        descripcion: "Curso transversal de formación general.",
+                        desbloquea: []
+                    }
+                ]
+            },
+            {
+                nombre: "Semestre VI",
+                ramos: [
+                    {
+                        nombre: "Investigación IV",
+                        descripcion: "Investigación avanzada.",
+                        desbloquea: []
+                    },
+                    {
+                        nombre: "Psicopatología y Psiquiatría: Adultez y Vejez",
+                        descripcion: "Trastornos psiquiátricos en adultos.",
+                        desbloquea: []
+                    },
+                    {
+                        nombre: "Psicología Social Comunitaria",
+                        descripcion: "Intervención comunitaria desde la psicología.",
+                        desbloquea: []
+                    },
+                    {
+                        nombre: "Psicodiagnóstico en Adultez y Vejez",
+                        descripcion: "Evaluación psicológica en adultos.",
+                        desbloquea: []
+                    },
+                    {
+                        nombre: "Psicología del Trabajo",
+                        descripcion: "Psicología organizacional y del trabajo.",
+                        desbloquea: ["Psicología de las Organizaciones y Recursos Humanos"]
+                    },
+                    {
+                        nombre: "Desarrollo de Carrera IV",
+                        descripcion: "Desarrollo profesional experto.",
+                        desbloquea: ["Desarrollo de Carrera V"]
+                    },
+                    {
+                        nombre: "Curso de Formación General",
+                        descripcion: "Curso transversal de formación general.",
+                        desbloquea: []
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        año: 4,
+        semestres: [
+            {
+                nombre: "Semestre VII",
+                ramos: [
+                    {
+                        nombre: "Psicología Educacional",
+                        descripcion: "Intervención en contextos educativos.",
+                        desbloquea: []
+                    },
+                    {
+                        nombre: "Psicología Jurídica",
+                        descripcion: "Aplicación de la psicología en el ámbito legal.",
+                        desbloquea: []
+                    },
+                    {
+                        nombre: "Psicología Clínica",
+                        descripcion: "Evaluación y tratamiento psicológico.",
+                        desbloquea: []
+                    },
+                    {
+                        nombre: "Diseño y Evaluación de Proyectos",
+                        descripcion: "Creación y evaluación de proyectos psicológicos.",
+                        desbloquea: []
+                    },
+                    {
+                        nombre: "Psicología de las Organizaciones y Recursos Humanos",
+                        descripcion: "Gestión de personas y organizaciones.",
+                        desbloquea: []
+                    },
+                    {
+                        nombre: "Desarrollo de Carrera V",
+                        descripcion: "Desarrollo profesional final.",
+                        desbloquea: []
+                    },
+                    {
+                        nombre: "Curso de Formación General",
+                        descripcion: "Curso transversal de formación general.",
+                        desbloquea: []
+                    }
+                ]
+            },
+            {
+                nombre: "Semestre VIII",
+                ramos: [
+                    {
+                        nombre: "Taller de Investigación Clínica I",
+                        descripcion: "Investigación clínica inicial.",
+                        desbloquea: ["Taller de Investigación Clínica II"]
+                    },
+                    {
+                        nombre: "Taller de Intervención Campos Psicosociales I",
+                        descripcion: "Intervención psicosocial inicial.",
+                        desbloquea: ["Taller de Intervención Campos Psicosociales II"]
+                    },
+                    {
+                        nombre: "Estrategia de Trabajo Grupal",
+                        descripcion: "Dinámicas de trabajo grupal.",
+                        desbloquea: []
+                    },
+                    {
+                        nombre: "Electivo de Profundización I",
+                        descripcion: "Electivo para profundizar en un área.",
+                        desbloquea: []
+                    },
+                    {
+                        nombre: "Curso de Formación General",
+                        descripcion: "Curso transversal de formación general.",
+                        desbloquea: []
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        año: 5,
+        semestres: [
+            {
+                nombre: "Semestre IX",
+                ramos: [
+                    {
+                        nombre: "Taller de Investigación Clínica II",
+                        descripcion: "Investigación clínica avanzada.",
+                        desbloquea: []
+                    },
+                    {
+                        nombre: "Taller de Intervención Campos Psicosociales II",
+                        descripcion: "Intervención psicosocial avanzada.",
+                        desbloquea: []
+                    },
+                    {
+                        nombre: "Electivo de Profundización II",
+                        descripcion: "Electivo avanzado.",
+                        desbloquea: []
+                    }
+                ]
+            },
+            {
+                nombre: "Semestre X",
+                ramos: [
+                    {
+                        nombre: "Práctica Profesional",
+                        descripcion: "Práctica profesional supervisada.",
+                        desbloquea: []
+                    },
+                    {
+                        nombre: "Electico de profundización III",
+                        descripcion: "Último electivo avanzado.",
+                        desbloquea: []
+                    }
+                ]
+            }
+        ]
+    }
 ];
 
-const mallaDiv = document.getElementById("malla");
+const estadoRamos = {}; // Para guardar si cada ramo está aprobado o desbloqueado
 
-ramos.forEach(ramo => {
-  const div = document.createElement("div");
-  div.classList.add("ramo");
-  if (ramo.requisitos.length > 0) div.classList.add("bloqueado");
-  div.id = ramo.id;
-  div.textContent = ramo.nombre;
-  div.addEventListener("click", () => aprobar(ramo.id));
-  mallaDiv.appendChild(div);
-});
+// Inicializa estado de todos los ramos
+function inicializarEstado() {
+    malla.forEach(año => {
+        año.semestres.forEach(semestre => {
+            semestre.ramos.forEach(ramo => {
+                estadoRamos[ramo.nombre] = {
+                    aprobado: false,
+                    desbloqueado: false
+                };
+            });
+        });
+    });
 
-function aprobar(id) {
-  const ramo = ramos.find(r => r.id === id);
-  const div = document.getElementById(id);
-  if (div.classList.contains("bloqueado") || div.classList.contains("aprobado")) return;
-  div.classList.add("aprobado");
-  // desbloquear los que dependen de este
-  ramos.forEach(r => {
-    if (r.requisitos.includes(id)) {
-      document.getElementById(r.id).classList.remove("bloqueado");
-    }
-  });
+    // Desbloquear los ramos del primer semestre
+    malla[0].semestres[0].ramos.forEach(ramo => {
+        estadoRamos[ramo.nombre].desbloqueado = true;
+    });
 }
+
+// Renderiza la malla en el HTML
+function renderMalla() {
+    const container = document.getElementById('malla-container');
+    container.innerHTML = "";
+
+    malla.forEach(año => {
+        const añoDiv = document.createElement('div');
+        añoDiv.className = "año";
+
+        const añoTitulo = document.createElement('h2');
+        añoTitulo.textContent = `Año ${año.año}`;
+        añoTitulo.style.color = "#7c4dff";
+        añoDiv.appendChild(añoTitulo);
+
+        año.semestres.forEach(semestre => {
+            const semestreDiv = document.createElement('div');
+            semestreDiv.className = "semestre-group";
+
+            const semestreTitulo = document.createElement('div');
+            semestreTitulo.className = "semestre-title";
+            semestreTitulo.textContent = semestre.nombre;
+            semestreDiv.appendChild(semestreTitulo);
+
+            const ramosDiv = document.createElement('div');
+            ramosDiv.className = "semestre";
+
+            semestre.ramos.forEach(ramo => {
+                const ramoDiv = document.createElement('div');
+                ramoDiv.className = "ramo";
+                if (estadoRamos[ramo.nombre].aprobado) {
+                    ramoDiv.classList.add("aprobado");
+                }
+                if (estadoRamos[ramo.nombre].desbloqueado) {
+                    ramoDiv.classList.add("desbloqueado");
+                }
+                if (!estadoRamos[ramo.nombre].desbloqueado) {
+                    ramoDiv.classList.add("bloqueado");
+                }
+
+                ramoDiv.onclick = function() {
+                    aprobarRamo(ramo.nombre, ramo.desbloquea);
+                };
+
+                const nombreDiv = document.createElement('div');
+                nombreDiv.className = "nombre";
+                nombreDiv.textContent = ramo.nombre;
+                ramoDiv.appendChild(nombreDiv);
+
+                const descDiv = document.createElement('div');
+                descDiv.className = "descripcion";
+                descDiv.textContent = ramo.descripcion;
+                ramoDiv.appendChild(descDiv);
+
+                ramosDiv.appendChild(ramoDiv);
+            });
+
+            semestreDiv.appendChild(ramosDiv);
+            añoDiv.appendChild(semestreDiv);
+        });
+
+        container.appendChild(añoDiv);
+    });
+}
+
+// Aprueba el ramo y desbloquea los siguientes
+function aprobarRamo(nombre, desbloqueaArr) {
+    if (!estadoRamos[nombre].desbloqueado || estadoRamos[nombre].aprobado) return;
+
+    estadoRamos[nombre].aprobado = true;
+
+    // Desbloquea los ramos que dependían de este
+    if (desbloqueaArr) {
+        desbloqueaArr.forEach(siguiente => {
+            estadoRamos[siguiente].desbloqueado = true;
+        });
+    }
+
+    renderMalla();
+}
+
+// Inicialización
+inicializarEstado();
+renderMalla();
